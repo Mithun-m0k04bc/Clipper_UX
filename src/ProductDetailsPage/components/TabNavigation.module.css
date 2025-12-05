@@ -1,0 +1,67 @@
+/* Living Design Tab Navigation Styles */
+
+.tabContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: var(--component-tab-navigation-container-border-width-bottom) solid var(--component-tab-navigation-container-border-color-bottom);
+}
+
+.tab {
+  padding: 0 var(--component-tab-navigation-item-padding-horizontal);
+  font-family: var(--component-tab-navigation-item-label-font-family);
+  font-size: var(--component-tab-navigation-item-label-font-size);
+  font-weight: var(--component-tab-navigation-item-label-font-weight);
+  line-height: var(--component-tab-navigation-item-label-line-height);
+  color: var(--component-tab-navigation-item-label-text-color);
+  background-color: var(--component-tab-navigation-item-background-color-default);
+  border: none;
+  border-bottom: var(--component-tab-navigation-item-border-width-bottom) solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  background-color: var(--component-tab-navigation-item-background-color-hover);
+}
+
+.tab:focus {
+  outline: none;
+  background-color: var(--component-tab-navigation-item-background-color-focus);
+}
+
+.tab:active {
+  background-color: var(--component-tab-navigation-item-background-color-active);
+}
+
+.tabActive {
+  font-weight: var(--component-tab-navigation-item-label-state-is-current-font-weight);
+  color: var(--color-core-blue-100);
+}
+
+.tabActive::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: var(--component-tab-navigation-item-indicator-offset-left);
+  right: var(--component-tab-navigation-item-indicator-offset-right);
+  height: var(--component-tab-navigation-item-indicator-height);
+  background-color: var(--component-tab-navigation-item-indicator-state-is-current-background-color);
+  border-radius: var(--component-tab-navigation-item-indicator-border-radius-top-left) var(--component-tab-navigation-item-indicator-border-radius-top-right) 0 0;
+}
+
+.badge {
+  padding: 0 0.375rem;
+  font-size: 10px;
+  font-weight: 700;
+  background-color: var(--color-core-blue-10);
+  color: var(--color-core-blue-110);
+  border-radius: 0.25rem;
+}
+
