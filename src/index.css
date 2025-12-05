@@ -1,42 +1,44 @@
 @import "tailwindcss";
 
-/* Import Living Design CSS Tokens */
+/* Living Design CSS Tokens - Using Fallback Styles for Public Deployment */
+/* Original imports commented out as they require Walmart npm registry:
 @import "@livingdesign/tokens/dist/css/light/regular/globals.css";
 @import "@livingdesign/tokens/dist/css/light/regular/components/TabNavigation.css";
+*/
 
 @theme {
-  /* Use Living Design color tokens */
-  --color-blue-primary: var(--color-core-blue-100);
-  --color-blue-dark: var(--color-core-blue-110);
-  --color-blue-light: var(--color-core-blue-10);
+  /* Living Design Color Tokens - Hardcoded Fallbacks */
+  --color-blue-primary: #0071DC;
+  --color-blue-dark: #004F9A;
+  --color-blue-light: #E6F1FC;
   
-  --color-green-primary: var(--color-core-green-100);
-  --color-green-light: var(--color-core-green-10);
+  --color-green-primary: #22C55E;
+  --color-green-light: #EAF3E6;
   
-  --color-orange-primary: var(--color-core-orange-100);
-  --color-orange-light: var(--color-core-orange-10);
+  --color-orange-primary: #FA6400;
+  --color-orange-light: #FFF0E6;
   
-  --color-red-primary: var(--color-semantic-error-300);
-  --color-red-light: var(--color-semantic-error-100);
+  --color-red-primary: #E53935;
+  --color-red-light: #FFEBEE;
   
-  --color-purple-primary: var(--color-core-purple-100);
-  --color-purple-light: var(--color-core-purple-10);
+  --color-purple-primary: #7B61FF;
+  --color-purple-light: #EFEBF2;
   
   /* Living Design Grays */
-  --color-gray-50: var(--color-core-gray-5);
-  --color-gray-100: var(--color-core-gray-10);
-  --color-gray-200: var(--color-core-gray-20);
-  --color-gray-300: var(--color-core-gray-30);
-  --color-gray-400: var(--color-core-gray-40);
-  --color-gray-500: var(--color-core-gray-50);
-  --color-gray-600: var(--color-core-gray-70);
-  --color-gray-700: var(--color-core-gray-100);
-  --color-gray-800: var(--color-core-gray-130);
-  --color-gray-900: var(--color-core-gray-160);
+  --color-gray-50: #FAFAFA;
+  --color-gray-100: #F5F5F5;
+  --color-gray-200: #E5E7EB;
+  --color-gray-300: #D1D5DB;
+  --color-gray-400: #9CA3AF;
+  --color-gray-500: #6B7280;
+  --color-gray-600: #4B5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1F2937;
+  --color-gray-900: #111827;
   
-  /* Typography - Living Design uses Bogle/Bogle Mono */
-  --font-sans: var(--font-family-primary), system-ui, -apple-system, sans-serif;
-  --font-mono: var(--font-family-monospace), 'Courier New', monospace;
+  /* Typography - Living Design uses Bogle */
+  --font-sans: 'Bogle', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Bogle Mono', 'Courier New', monospace;
 }
 
 * {
@@ -50,11 +52,11 @@ html, body, #root {
 }
 
 body {
-  font-family: var(--font-family-primary, system-ui, -apple-system, sans-serif);
-  font-size: var(--font-size-body-m, 14px);
-  line-height: var(--line-height-body-m, 1.5);
-  color: var(--color-core-gray-180);
-  background-color: var(--color-core-white);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: #1F2937;
+  background-color: #FFFFFF;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -68,12 +70,12 @@ button {
 
 /* Living Design Link Styles */
 a {
-  color: var(--color-core-blue-100);
+  color: #0071DC;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 a:hover {
-  color: var(--color-core-blue-110);
+  color: #004F9A;
   text-decoration: underline;
 }
