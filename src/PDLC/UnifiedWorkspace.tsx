@@ -521,12 +521,58 @@ export default function UnifiedWorkspace() {
     const selectedTheme = signalAnalysis.themes[themeIdx]
     const selectedThemeId = `theme-${themeIdx}`
 
-    // Generate hypothesis based on the selected theme
+    // Generate hypothesis based on the selected theme - check EXACT theme first, then fallback to keywords
     const themeLower = selectedTheme.name.toLowerCase()
     let problemStatement = ''
     let hypothesisText = ''
 
-    if (themeLower.includes('payment') || themeLower.includes('timeout')) {
+    // Mobile App Performance specific themes
+    if (themeLower.includes('app load time')) {
+      problemStatement = `App load time issues identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Users experience slow initial load times (avg 4.2s) and sluggish screen transitions, causing 35% of users to abandon the app before completing actions.`
+      hypothesisText = 'If we optimize app initialization, implement lazy loading, and reduce bundle size by 40%, we can reduce load time to <2 seconds and decrease app abandonment by 50% within 8 weeks.'
+    } else if (themeLower.includes('checkout performance')) {
+      problemStatement = `Checkout flow performance issues identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Users experience delays during checkout (avg 3.5s per step), payment processing lags, and UI freezes, resulting in 42% checkout abandonment.`
+      hypothesisText = 'If we optimize checkout API calls, implement optimistic UI updates, and add progress indicators, we can reduce checkout time by 60% and increase conversion rates by 25% within 6 weeks.'
+    } else if (themeLower.includes('crash') || themeLower.includes('error rates')) {
+      problemStatement = `App stability issues identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Users experience crashes (2.3% crash rate), ANR errors, and unexpected logouts, particularly on Android devices and during payment flows.`
+      hypothesisText = 'If we fix critical crash patterns, implement better error boundaries, and add offline fallbacks, we can reduce crash rate to <0.5% and improve user retention by 30% within 10 weeks.'
+    } else if (themeLower.includes('network timeout')) {
+      problemStatement = `Network connectivity issues identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Users experience timeout errors, failed API requests (15% failure rate), and inconsistent data loading, especially in areas with poor connectivity.`
+      hypothesisText = 'If we implement request retry logic, add offline caching, and optimize API timeouts, we can reduce network failures by 70% and improve app reliability for users in low-connectivity areas within 6 weeks.'
+    }
+    // Payment specific themes
+    else if (themeLower.includes('payment processing delays') || themeLower.includes('payment delay')) {
+      problemStatement = `Payment processing delays identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Transactions take 3-5 seconds to process, causing user anxiety and 28% payment abandonment at the final step.`
+      hypothesisText = 'If we optimize payment gateway integration, reduce processing time to <2 seconds, and add real-time status updates, we can reduce payment abandonment by 50% and improve checkout completion rates within 6 weeks.'
+    } else if (themeLower.includes('reconciliation accuracy')) {
+      problemStatement = `Payment reconciliation accuracy issues identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Manual reconciliation leads to 12% discrepancy rate, delayed settlements, and increased support tickets.`
+      hypothesisText = 'If we automate reconciliation with AI-powered matching and implement real-time validation, we can reduce discrepancies to <2% and decrease reconciliation time by 75% within 8 weeks.'
+    } else if (themeLower.includes('transaction matching')) {
+      problemStatement = `Transaction matching issues identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Mismatched transactions (8% rate) cause settlement delays, manual intervention, and financial reporting inaccuracies.`
+      hypothesisText = 'If we implement intelligent matching algorithms, add fuzzy matching for partial data, and automate exception handling, we can improve matching accuracy to 98% and reduce manual work by 80% within 10 weeks.'
+    } else if (themeLower.includes('reporting') || themeLower.includes('visibility')) {
+      problemStatement = `Payment reporting and visibility gaps identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Finance teams lack real-time insights, spend 20+ hours on manual reports, and face delayed decision-making.`
+      hypothesisText = 'If we build real-time dashboards, automate report generation, and add predictive analytics, we can reduce reporting time by 90% and enable proactive financial management within 6 weeks.'
+    }
+    // Seller Verification themes
+    else if (themeLower.includes('verification') && themeLower.includes('delay')) {
+      problemStatement = `Seller verification process experiences delays with ${selectedTheme.signals} signals indicating ${selectedTheme.status.toLowerCase()} priority issues. Sellers face verification times averaging 3-5 days, unclear status updates, leading to 45% drop-off during onboarding.`
+      hypothesisText = 'If we automate document verification using AI, provide real-time status updates, and reduce approval time to <24 hours, we can reduce seller onboarding drop-off from 45% to 20% within 8 weeks.'
+    } else if (themeLower.includes('document upload')) {
+      problemStatement = `Document upload issues identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Sellers experience upload failures (18% failure rate), unclear format requirements, and lack of guidance, causing frustration and abandonment.`
+      hypothesisText = 'If we improve upload UX with drag-and-drop, add format validation, and provide inline guidance, we can reduce upload failures by 75% and improve seller satisfaction within 6 weeks.'
+    } else if (themeLower.includes('identity verification')) {
+      problemStatement = `Identity verification failures identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. 22% of identity checks fail due to photo quality issues, unclear instructions, and lack of retry guidance.`
+      hypothesisText = 'If we add real-time photo quality checks, provide clear retry instructions, and implement AI-powered ID verification, we can reduce verification failures by 60% and improve onboarding completion within 8 weeks.'
+    } else if (themeLower.includes('onboarding ux')) {
+      problemStatement = `Onboarding UX problems identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Sellers find the process confusing, too long (avg 45 minutes), and lack progress indicators, resulting in 35% abandonment.`
+      hypothesisText = 'If we simplify the onboarding flow, add progress tracking, and provide contextual help, we can reduce onboarding time by 50% and increase completion rates by 40% within 6 weeks.'
+    } else if (themeLower.includes('communication gap')) {
+      problemStatement = `Communication gaps identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Sellers don't receive timely updates, lack clarity on next steps, and feel unsupported, leading to increased support contacts and dissatisfaction.`
+      hypothesisText = 'If we implement automated notifications, add in-app messaging, and provide proactive status updates, we can reduce support tickets by 50% and improve seller satisfaction by 35% within 6 weeks.'
+    }
+    // Generic payment/timeout fallback
+    else if (themeLower.includes('payment') || themeLower.includes('timeout')) {
       problemStatement = `Payment processing experiences significant delays with ${selectedTheme.signals} signals indicating ${selectedTheme.status.toLowerCase()} priority issues. Users face payment failures averaging 2.8 seconds, leading to high cart abandonment rates of 68% at the payment step.`
       hypothesisText = 'If we reduce payment API timeout from 2.8s to <1.5s and implement automatic retry mechanisms, we can reduce payment-related cart abandonment from 68% to 40% within 6 weeks.'
     } else if (themeLower.includes('seller') || themeLower.includes('verification')) {
@@ -878,8 +924,120 @@ export default function UnifiedWorkspace() {
 
     const themeLower = selectedTheme.name.toLowerCase()
 
-    // Generate PRD content based on selected theme
-    if (themeLower.includes('payment') || themeLower.includes('timeout')) {
+    // Generate PRD content based on selected theme - check EXACT theme first, then fallback
+    
+    // Mobile App Performance specific themes
+    if (themeLower.includes('app load time')) {
+      return {
+        overview: 'This PRD outlines requirements for optimizing app initialization and load times, including lazy loading, bundle optimization, and performance monitoring.',
+        problem: `App load time issues identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Users experience slow initial load times (avg 4.2s) and sluggish screen transitions, causing 35% of users to abandon the app before completing actions.`,
+        goals: 'Primary Goal: Reduce app load time to <2 seconds and decrease app abandonment by 50%',
+        functional: 'FR1: Implement code splitting and lazy loading for non-critical modules\nFR2: Optimize asset loading with caching and compression\nFR3: Add skeleton screens during initial load\nFR4: Preload critical resources on app launch\nFR5: Monitor and track load time metrics per screen',
+        nonFunctional: 'NFR1: App cold start <2s, warm start <1s (P95)\nNFR2: Bundle size reduction of 40%\nNFR3: Support iOS 14+ and Android 10+\nNFR4: Real-time performance monitoring',
+      }
+    } else if (themeLower.includes('checkout performance')) {
+      return {
+        overview: 'This PRD outlines requirements for optimizing checkout flow performance, including API optimization, optimistic UI updates, and progress indicators.',
+        problem: `Checkout flow performance issues identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Users experience delays during checkout (avg 3.5s per step), payment processing lags, and UI freezes, resulting in 42% checkout abandonment.`,
+        goals: 'Primary Goal: Reduce checkout time by 60% and increase conversion rates by 25%',
+        functional: 'FR1: Optimize checkout API calls with parallel processing\nFR2: Implement optimistic UI updates for instant feedback\nFR3: Add step-by-step progress indicators\nFR4: Preload payment gateway during cart review\nFR5: Cache user data to reduce API calls',
+        nonFunctional: 'NFR1: Checkout API response time <1.5s (P95)\nNFR2: Support 5K concurrent checkout sessions\nNFR3: Graceful degradation during API failures\nNFR4: Zero data loss during network interruptions',
+      }
+    } else if (themeLower.includes('crash') || themeLower.includes('error rates')) {
+      return {
+        overview: 'This PRD outlines requirements for improving app stability, reducing crashes, and implementing robust error handling mechanisms.',
+        problem: `App stability issues identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Users experience crashes (2.3% crash rate), ANR errors, and unexpected logouts, particularly on Android devices and during payment flows.`,
+        goals: 'Primary Goal: Reduce crash rate to <0.5% and improve user retention by 30%',
+        functional: 'FR1: Implement error boundaries for critical sections\nFR2: Add automatic crash recovery with state preservation\nFR3: Implement offline fallbacks for network failures\nFR4: Add logging and diagnostics for crash analysis\nFR5: Create user-friendly error messages with recovery actions',
+        nonFunctional: 'NFR1: Crash-free rate >99.5%\nNFR2: ANR rate <0.3%\nNFR3: Real-time crash monitoring and alerting\nNFR4: Automated crash reporting with stack traces',
+      }
+    } else if (themeLower.includes('network timeout')) {
+      return {
+        overview: 'This PRD outlines requirements for improving network reliability, implementing retry logic, and adding offline capabilities.',
+        problem: `Network connectivity issues identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Users experience timeout errors, failed API requests (15% failure rate), and inconsistent data loading, especially in areas with poor connectivity.`,
+        goals: 'Primary Goal: Reduce network failures by 70% and improve app reliability in low-connectivity areas',
+        functional: 'FR1: Implement exponential backoff retry logic for failed requests\nFR2: Add offline data caching with sync on reconnect\nFR3: Optimize API timeouts based on request type\nFR4: Display connection status and retry options\nFR5: Queue critical actions for auto-retry',
+        nonFunctional: 'NFR1: API failure rate <3%\nNFR2: Support offline mode for core features\nNFR3: Automatic retry with max 3 attempts\nNFR4: Network monitoring with adaptive timeouts',
+      }
+    }
+    // Payment Reconciliation specific themes
+    else if (themeLower.includes('payment processing delays') || themeLower.includes('payment delay')) {
+      return {
+        overview: 'This PRD outlines requirements for optimizing payment processing speed, adding real-time status updates, and improving user confidence during payment.',
+        problem: `Payment processing delays identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Transactions take 3-5 seconds to process, causing user anxiety and 28% payment abandonment at the final step.`,
+        goals: 'Primary Goal: Reduce payment processing time to <2 seconds and decrease payment abandonment by 50%',
+        functional: 'FR1: Optimize payment gateway integration and reduce latency\nFR2: Implement parallel validation for payment data\nFR3: Add real-time payment status updates with progress indicator\nFR4: Preload payment processors during cart review\nFR5: Display estimated processing time to users',
+        nonFunctional: 'NFR1: Payment API response <2s (P95)\nNFR2: 99.9% payment processing uptime\nNFR3: Support 10K concurrent transactions\nNFR4: PCI DSS compliance maintained',
+      }
+    } else if (themeLower.includes('reconciliation accuracy')) {
+      return {
+        overview: 'This PRD outlines requirements for automating payment reconciliation with AI-powered matching and real-time validation.',
+        problem: `Payment reconciliation accuracy issues identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Manual reconciliation leads to 12% discrepancy rate, delayed settlements, and increased support tickets.`,
+        goals: 'Primary Goal: Reduce discrepancies to <2% and decrease reconciliation time by 75%',
+        functional: 'FR1: Implement AI-powered transaction matching algorithm\nFR2: Add real-time validation for incoming transactions\nFR3: Automate exception handling with smart rules\nFR4: Generate automated discrepancy reports\nFR5: Provide manual review queue for edge cases',
+        nonFunctional: 'NFR1: Matching accuracy >98%\nNFR2: Real-time processing for all transactions\nNFR3: Support multi-currency reconciliation\nNFR4: Audit trail for all reconciliation actions',
+      }
+    } else if (themeLower.includes('transaction matching')) {
+      return {
+        overview: 'This PRD outlines requirements for intelligent transaction matching, fuzzy matching algorithms, and automated exception handling.',
+        problem: `Transaction matching issues identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Mismatched transactions (8% rate) cause settlement delays, manual intervention, and financial reporting inaccuracies.`,
+        goals: 'Primary Goal: Improve matching accuracy to 98% and reduce manual work by 80%',
+        functional: 'FR1: Implement intelligent matching with multiple criteria\nFR2: Add fuzzy matching for partial data matches\nFR3: Automate exception handling with configurable rules\nFR4: Create confidence scoring for matches\nFR5: Provide batch matching for bulk transactions',
+        nonFunctional: 'NFR1: Matching engine processes 10K transactions/min\nNFR2: Matching accuracy >98%\nNFR3: Support configurable matching rules\nNFR4: Real-time matching with <5s latency',
+      }
+    } else if (themeLower.includes('reporting') || themeLower.includes('visibility')) {
+      return {
+        overview: 'This PRD outlines requirements for real-time payment dashboards, automated reporting, and predictive analytics for finance teams.',
+        problem: `Payment reporting and visibility gaps identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Finance teams lack real-time insights, spend 20+ hours on manual reports, and face delayed decision-making.`,
+        goals: 'Primary Goal: Reduce reporting time by 90% and enable proactive financial management',
+        functional: 'FR1: Build real-time dashboards with key payment metrics\nFR2: Automate daily, weekly, monthly report generation\nFR3: Add predictive analytics for revenue forecasting\nFR4: Implement custom report builder\nFR5: Enable data export in multiple formats',
+        nonFunctional: 'NFR1: Dashboard refresh rate <30s\nNFR2: Report generation <5 minutes\nNFR3: Support 5 years of historical data\nNFR4: Role-based access control',
+      }
+    }
+    // Seller Verification themes
+    else if (themeLower.includes('verification') && themeLower.includes('delay')) {
+      return {
+        overview: 'This PRD outlines requirements for automating seller verification using AI, providing real-time status updates, and reducing approval times.',
+        problem: `Seller verification process experiences delays with ${selectedTheme.signals} signals indicating ${selectedTheme.status.toLowerCase()} priority issues. Sellers face verification times averaging 3-5 days, unclear status updates, leading to 45% drop-off during onboarding.`,
+        goals: 'Primary Goal: Reduce verification time to <24 hours and decrease seller drop-off from 45% to 20%',
+        functional: 'FR1: Implement AI-powered document verification\nFR2: Add real-time status updates via email and SMS\nFR3: Automate identity checks with third-party services\nFR4: Create priority queue for high-value sellers\nFR5: Provide self-service resubmission',
+        nonFunctional: 'NFR1: AI verification accuracy >95%\nNFR2: Process 80% of verifications within 24 hours\nNFR3: Support 1K concurrent verification requests\nNFR4: GDPR and data privacy compliance',
+      }
+    } else if (themeLower.includes('document upload')) {
+      return {
+        overview: 'This PRD outlines requirements for improving document upload UX with drag-and-drop, format validation, and inline guidance.',
+        problem: `Document upload issues identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Sellers experience upload failures (18% failure rate), unclear format requirements, and lack of guidance, causing frustration and abandonment.`,
+        goals: 'Primary Goal: Reduce upload failures by 75% and improve seller satisfaction',
+        functional: 'FR1: Implement drag-and-drop file upload interface\nFR2: Add real-time format and size validation\nFR3: Provide inline guidance for required documents\nFR4: Support multiple file formats (PDF, JPG, PNG)\nFR5: Add image compression for large files',
+        nonFunctional: 'NFR1: Upload success rate >95%\nNFR2: Support files up to 10MB\nNFR3: Upload time <5s for average file\nNFR4: Mobile-responsive upload interface',
+      }
+    } else if (themeLower.includes('identity verification')) {
+      return {
+        overview: 'This PRD outlines requirements for improving identity verification with real-time photo quality checks, clear instructions, and AI-powered ID verification.',
+        problem: `Identity verification failures identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. 22% of identity checks fail due to photo quality issues, unclear instructions, and lack of retry guidance.`,
+        goals: 'Primary Goal: Reduce verification failures by 60% and improve onboarding completion',
+        functional: 'FR1: Add real-time photo quality assessment\nFR2: Provide clear retry instructions with examples\nFR3: Implement AI-powered ID document verification\nFR4: Add liveness detection for selfie verification\nFR5: Support multiple ID types (passport, license, national ID)',
+        nonFunctional: 'NFR1: ID verification accuracy >95%\nNFR2: Verification time <30 seconds\nNFR3: Support 50+ countries\nNFR4: Biometric data encryption',
+      }
+    } else if (themeLower.includes('onboarding ux')) {
+      return {
+        overview: 'This PRD outlines requirements for simplifying seller onboarding flow, adding progress tracking, and providing contextual help.',
+        problem: `Onboarding UX problems identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Sellers find the process confusing, too long (avg 45 minutes), and lack progress indicators, resulting in 35% abandonment.`,
+        goals: 'Primary Goal: Reduce onboarding time by 50% and increase completion rates by 40%',
+        functional: 'FR1: Simplify onboarding flow to 5 key steps\nFR2: Add progress bar with step completion indicators\nFR3: Provide contextual help and tooltips\nFR4: Enable save-and-resume for partial completions\nFR5: Add onboarding checklist with task breakdown',
+        nonFunctional: 'NFR1: Target onboarding time <20 minutes\nNFR2: Mobile-responsive design\nNFR3: Support multiple languages\nNFR4: Auto-save every 30 seconds',
+      }
+    } else if (themeLower.includes('communication gap')) {
+      return {
+        overview: 'This PRD outlines requirements for implementing automated notifications, in-app messaging, and proactive status updates for sellers.',
+        problem: `Communication gaps identified through ${selectedTheme.signals} signals with ${selectedTheme.status.toLowerCase()} priority. Sellers don't receive timely updates, lack clarity on next steps, and feel unsupported, leading to increased support contacts and dissatisfaction.`,
+        goals: 'Primary Goal: Reduce support tickets by 50% and improve seller satisfaction by 35%',
+        functional: 'FR1: Implement automated email and SMS notifications\nFR2: Add in-app messaging with status updates\nFR3: Provide proactive alerts for pending actions\nFR4: Create help center with FAQs and tutorials\nFR5: Enable live chat support during business hours',
+        nonFunctional: 'NFR1: Notification delivery <1 minute\nNFR2: Support multi-channel messaging\nNFR3: Message delivery rate >99%\nNFR4: Personalized messaging based on seller status',
+      }
+    }
+    // Generic fallbacks
+    else if (themeLower.includes('payment') || themeLower.includes('timeout')) {
       return {
         overview: 'This PRD outlines requirements for optimizing payment processing to reduce timeouts and improve checkout success rates. Focus areas include API optimization, retry mechanisms, and user-friendly error handling.',
         problem: `Payment processing experiences significant delays with ${selectedTheme.signals} signals indicating ${selectedTheme.status.toLowerCase()} priority issues. Users face payment failures averaging 2.8 seconds, leading to high cart abandonment rates of 68% at the payment step.`,
